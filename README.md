@@ -15,9 +15,9 @@ For example in C# Console Application:
 ```c#
       _serialPort = new SerialPort(portName, baudRate)
       {
-        ...
-        DtrEnable = true,
-        RtsEnable = true
+            ...
+            DtrEnable = true,
+            RtsEnable = true
       };
 ```
 
@@ -30,8 +30,8 @@ Sometimes Unity won't automatically detect the line feed character and that's wh
 ```c#
       _serialPort = new SerialPort(portName, baudRate)
       {
-        ...
-        NewLine = "\n"
+            ...
+            NewLine = "\n"
       };
 ```
 
@@ -45,3 +45,37 @@ Event handlers update the UI properties.
 #### Unity Player Settings
 
 Api Compatibility Level has to be set to .NET 2.0 in order to make System.IO.Ports available.
+
+#### How to use it all
+
+There is a class ArduinoEsploraComponent. It is responsible for the most work. Add it as a component to a game object, set the port and baud rate. Hit play and it should work. In order to access the actual values of the sensors, you need to reference the component in any other class like this:
+
+```c#
+      public class Tester : MonoBehaviour
+      {
+            public ArduinoEsploraComponent ArduinoEsplora;
+
+            public int Slider;
+            public int Light;
+            public int Temp;
+            public int Mic;
+            public bool ButtonDown;
+
+            private void Start()
+            {
+            }
+
+            private void Update()
+            {
+                  if (ArduinoEsplora.SensorValues != null)
+                  {
+                     Slider = ArduinoEsplora.SensorValues.Slider.Value;
+                     Light = ArduinoEsplora.SensorValues.LightSensor.Value;
+                     Temp = ArduinoEsplora.SensorValues.Temperature.Value;
+                     Mic = ArduinoEsplora.SensorValues.Microphone.Value;
+                     ButtonDown = ArduinoEsplora.SensorValues.ButtonDown.Value;
+                  }
+            }
+      }
+```
+
